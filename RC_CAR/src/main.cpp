@@ -33,10 +33,10 @@ const uint16_t FRONT_STOP  = 50;   // cm
 const uint16_t SIDE_STOP   = 25;   // cm
 
 // ===== GESCHWINDIGKEIT =====
-const uint8_t BASE_SPEED = 200;
+const uint8_t BASE_SPEED = 170;
 
 // ===== KREIS-ERKENNUNG =====
-const uint16_t TURN_RESET_TIME = 2200;  // ms — Zähler reset wenn kein Turn in dieser Zeit
+const uint16_t TURN_RESET_TIME = 2500;  // ms — Zähler reset wenn kein Turn in dieser Zeit
 
 // ===== STATE MACHINE =====
 /*
@@ -171,10 +171,10 @@ void driveForward() {
     turn_left_flag = (diff > 0);
 
     
-    if (turn_count_right >= 4) {
+    if (turn_count_right >= 5) {
       turn_left_flag = true;
       turn_count_right = 0;
-    } else if (turn_count_left >= 4) {
+    } else if (turn_count_left >= 5) {
       turn_left_flag = false;
       turn_count_left = 0;
     }
@@ -187,8 +187,7 @@ void driveForward() {
   }
 }
 
-void doTurn() 
-{
+void doTurn() {
   if (turn_left_flag) {
     turnLeft();
   } else {
@@ -203,8 +202,7 @@ void doTurn()
 
 
 // ===== BUTTONS =====
-void checkButtons() 
-{
+void checkButtons() {
   if (digitalRead(START_Button) == LOW && state == STOPP)
     state = FORWARD;
   if (digitalRead(STOP_Button) == LOW)
@@ -213,40 +211,33 @@ void checkButtons()
 
 
 // ===== MOTORSTEUERUNG =====
-void forward() 
-{
+void forward() {
   digitalWrite(MOTOR_Right_Forward, HIGH);
   digitalWrite(MOTOR_Right_Backward, LOW);
   digitalWrite(MOTOR_Left_Forward, LOW);
   digitalWrite(MOTOR_Left_Backward, HIGH);
 }
 
-void backward()
-{
+void backward() {
   digitalWrite(MOTOR_Right_Forward, LOW);
   digitalWrite(MOTOR_Right_Backward, HIGH);
   digitalWrite(MOTOR_Left_Forward, HIGH);
   digitalWrite(MOTOR_Left_Backward, LOW);
 }
 
-void turnRight()
+void turnRight() 
 {
   digitalWrite(MOTOR_Right_Forward, LOW);
   digitalWrite(MOTOR_Right_Backward, HIGH);
   digitalWrite(MOTOR_Left_Forward, LOW);
   digitalWrite(MOTOR_Left_Backward, HIGH);
-   analogWrite(MOTOR_Right_Speed, 120);
-  analogWrite(MOTOR_Left_Speed,  120);
 }
 
-void turnLeft() 
-{
+void turnLeft() {
   digitalWrite(MOTOR_Right_Forward, HIGH);
   digitalWrite(MOTOR_Right_Backward, LOW);
   digitalWrite(MOTOR_Left_Forward, HIGH);
-  digitalWrite(MOTOR_Left_Backward, LOW); 
-  analogWrite(MOTOR_Right_Speed, 120);
-  analogWrite(MOTOR_Left_Speed,  120);
+  digitalWrite(MOTOR_Left_Backward, LOW);
 }
 
 void stop() {
